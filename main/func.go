@@ -5,7 +5,6 @@ import (
 	"html"
 	"net/http"
 	"os"
-	"strings"
 	"text/template"
 )
 
@@ -13,7 +12,7 @@ func ExportAsciiArt(w http.ResponseWriter, r *http.Request) {
 	input := r.FormValue("Text")
 	file_format := r.FormValue("Banner") + ".txt"
 
-	content, _ := os.ReadFile(file_format)
+	content, _ := os.ReadFile("main/" + file_format)
 
 	characters := make(map[rune][]string) // this map holds the runes with their draw
 	temp_slice := Splitt(string(content)) // this is a temporary slice used to store the ASCII art for each rune before adding it to the map
@@ -142,37 +141,13 @@ func Draw(input string, characters map[rune][]string) []string {
 }
 
 func Css(w http.ResponseWriter, r *http.Request) {
-	filePath := strings.TrimPrefix(r.URL.Path, "/")
-	file, err := os.Stat(filePath)
-
-	if err != nil || file.IsDir() {
-		dataerror := map[string]string{}
-
-		if r.URL.Path == "/css/" {
-			dataerror = map[string]string{
-				"ErrorCode":    "403",
-				"ErrorMessage": "Unauthorized",
-			}
-			w.WriteHeader(http.StatusUnauthorized)
-
-		} else {
-			dataerror = map[string]string{
-				"ErrorCode":    "404",
-				"ErrorMessage": "Not found",
-			}
-			w.WriteHeader(http.StatusNotFound)
-		}
-		tmpl, err := template.ParseFiles("./templates/error.html")
-		if err != nil {
-			w.WriteHeader(500)
-			tmpl.Execute(w, dataerror)
-			return
-		}
-		tmpl.Execute(w, dataerror)
+	if r.URL.Path == "/css/" {
+		http.Error(w, "forbidden", http.StatusForbidden)
 		return
 	}
-
-	http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))).ServeHTTP(w, r)
+	// Serve the CSS file
+	cssFile := "main/css/" + r.URL.Path[len("/css/"):] // this : r.URL.Path[len("/css/"):] gives me (for example) index.css
+	http.ServeFile(w, r, cssFile)
 }
 
 /*
@@ -185,19 +160,19 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 			"ErrorMessage": "Method Not Allowed",
 		}
 		w.WriteHeader(405)
-		errormesage := template.Must(template.ParseFiles("./templates/error.html"))
+		errormesage := template.Must(template.ParseFiles("main/templates/error.html"))
 		errormesage.Execute(w, dataerror)
 		return
 	} else {
 		if r.URL.Path == "/" {
-			tmpl, err := template.ParseFiles("./templates/index.html")
+			tmpl, err := template.ParseFiles("main/templates/index.html")
 			if err != nil {
 				dataerror := map[string]string{
 					"ErrorCode":    "500",
 					"ErrorMessage": "Internal Server Error",
 				}
 				w.WriteHeader(500)
-				errormesage := template.Must(template.ParseFiles("./templates/error.html"))
+				errormesage := template.Must(template.ParseFiles("main/templates/error.html"))
 				errormesage.Execute(w, dataerror)
 				return
 			}
@@ -208,7 +183,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 				"ErrorMessage": "not funde",
 			}
 			w.WriteHeader(404)
-			errormesage := template.Must(template.ParseFiles("./templates/error.html"))
+			errormesage := template.Must(template.ParseFiles("main/templates/error.html"))
 			errormesage.Execute(w, dataerror)
 			return
 		}
@@ -231,7 +206,7 @@ func Finaldrawing(w http.ResponseWriter, r *http.Request) {
 			"ErrorMessage": "Method Not Allowed",
 		}
 		w.WriteHeader(405)
-		errormesage := template.Must(template.ParseFiles("./templates/error.html"))
+		errormesage := template.Must(template.ParseFiles("main/templates/error.html"))
 		errormesage.Execute(w, dataerror)
 		return
 	}
@@ -243,7 +218,7 @@ func Finaldrawing(w http.ResponseWriter, r *http.Request) {
 		}
 		w.WriteHeader(http.StatusBadRequest)
 
-		tmpl, err := template.ParseFiles("./templates/error.html")
+		tmpl, err := template.ParseFiles("main/templates/error.html")
 		if err != nil {
 			http.Error(w, "Internal Server Error: Failed to load error template", http.StatusInternalServerError)
 			return
@@ -261,7 +236,7 @@ func Finaldrawing(w http.ResponseWriter, r *http.Request) {
 
 			w.WriteHeader(http.StatusBadRequest)
 
-			tmpl, err := template.ParseFiles("./templates/error.html")
+			tmpl, err := template.ParseFiles("main/templates/error.html")
 			if err != nil {
 				http.Error(w, "Internal Server Error: Failed to load error template", http.StatusInternalServerError)
 				return
@@ -271,14 +246,14 @@ func Finaldrawing(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	content, err1 := os.ReadFile(file_format)
+	content, err1 := os.ReadFile("main/" + file_format)
 	if err1 != nil {
 		dataerror := map[string]string{
 			"ErrorCode":    "500",
 			"ErrorMessage": "Internal Server Error",
 		}
 		w.WriteHeader(500)
-		errormesage := template.Must(template.ParseFiles("./templates/error.html"))
+		errormesage := template.Must(template.ParseFiles("main/templates/error.html"))
 		errormesage.Execute(w, dataerror)
 		return
 	}
@@ -293,7 +268,7 @@ func Finaldrawing(w http.ResponseWriter, r *http.Request) {
 			"ErrorMessage": "Internal Server Error",
 		}
 		w.WriteHeader(500)
-		errormesage := template.Must(template.ParseFiles("./templates/error.html"))
+		errormesage := template.Must(template.ParseFiles("main/templates/error.html"))
 		errormesage.Execute(w, dataerror)
 		return
 	}
@@ -304,7 +279,7 @@ func Finaldrawing(w http.ResponseWriter, r *http.Request) {
 		char++
 	}
 	clean_input := Split_with_newline(input)
-	tmpl := template.Must(template.ParseFiles("./templates/result.html"))
+	tmpl := template.Must(template.ParseFiles("main/templates/result.html"))
 
 	final := ""
 	for i := 0; i < len(clean_input); i++ {

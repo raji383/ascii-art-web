@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"fs"
+	"fs/main"
 )
 
 func main() {
