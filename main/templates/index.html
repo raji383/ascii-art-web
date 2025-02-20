@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ascii-art</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <a href="/" class="logo">zone01</a>
+    </header>
+    <section class="card">
+        <form action="/ascii-art" method="POST">
+            <label for="text">Enter Text:</label>
+            <textarea name="text" id="text" maxlength="1000" class = "text"></textarea>
+            <label style="margin-top: 7%;">Select Banner:</label>
+            <div class = "banner">
+                <div>
+                    
+
+                    <input type="radio" id="standard" name="banner" value="standard" checked>
+                    <label for="standard">Standard</label>
+                </div>
+                <div>
+
+                    <input type="radio" id="shadow" name="banner" value="shadow">
+                    <label for="shadow">Shadow</label>
+                </div>
+                <div>
+
+                    <input type="radio" id="thinkertoy" name="banner" value="thinkertoy">
+                    <label for="thinkertoy  ">Thinkertoy</label>
+                </div>
+            </div>
+            
+            <button type="submit" >Generate</button>
+            
+        </form>
+    </section>
+
+    <footer>
+        <p class="footer-title">Copyrights @<span>azraji</span> @<span>ychatoua</span></p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+    </footer>
+</body>
+
+</html>

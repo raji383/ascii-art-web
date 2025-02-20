@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Art Result</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <a href="/" class="logo">zone01</a>
+    </header>
+
+    <div class="container">
+        <header>
+            <h1>🎨 ASCII Art Result</h1>
+        </header>
+        <form action="/export" method="POST">
+            <input type="text" name="Text" value="{{.Text}}" style="display: none;">
+            <input type="text" name="Banner" value="{{.Banner}}" style="display: none;">
+            <section class=" details">
+                <p style=" white-space: nowrap;
+                        overflow: hidden;   
+                        text-overflow: ellipsis; "><strong>Original Text:</strong> {{.Text}}</p>
+                <p><strong>Selected Banner:</strong> {{.Banner}}</p>
+            </section>
+
+            <section class="result">
+                <h2>Your ASCII Art:</h2>
+                <div class="ascii-art">
+                    <pre>{{.Output}}</pre>
+                </div>
+            </section>
+            <div id="footer">
+                <button type="submit" class="btn">Download ASCII Art</button>
+                <a href="/" class="btn"> Back to Generator</a>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p class="footer-title">Copyrights ©<span>azraji</span> @<span>ychatoua</span></p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+    </footer>
+</body>
+
+</html>
